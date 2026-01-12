@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { useState, createContext, useContext, useEffect } from 'react'
 import Home from './components/Home'
 import Login from './components/Login'
