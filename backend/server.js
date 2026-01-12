@@ -451,9 +451,15 @@ app.post('/api/auth/forgot-password', async (req, res) => {
     } catch (emailError) {
       console.error('Email sending failed:', emailError);
       console.log(`Fallback: Reset code for ${email}: ${resetCode}`);
+      
+      // In development, include the code in response
+      const isDevelopment = process.env.NODE_ENV === 'development';
       res.json({ 
-        message: 'Reset code generated successfully. Check console for code (email service unavailable)',
-        fallback: true
+        message: isDevelopment ? 
+          `Reset code generated: ${resetCode} (email service unavailable)` : 
+          'Reset code generated successfully. Check console for code (email service unavailable)',
+        fallback: true,
+        ...(isDevelopment && { code: resetCode })
       });
     }
   } catch (error) {
@@ -576,6 +582,11 @@ app.get('/api/requests', authenticateToken, async (req, res) => {
           break;
         case 'reason':
           query.reason = searchRegex;
+          break;
+        case 'id':
+          if (mongoose.Types.ObjectId.isValid(search)) {
+            query._id = search;
+          }
           break;
         default:
           query.$or = [

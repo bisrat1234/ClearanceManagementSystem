@@ -71,6 +71,28 @@ class ApiService {
     this.removeToken();
   }
 
+  // Password Reset
+  async requestPasswordReset(email) {
+    return this.request('/auth/forgot-password', {
+      method: 'POST',
+      body: { email },
+    });
+  }
+
+  async verifyResetCode(email, code) {
+    return this.request('/auth/verify-reset-code', {
+      method: 'POST',
+      body: { email, code },
+    });
+  }
+
+  async resetPassword(email, code, newPassword) {
+    return this.request('/auth/reset-password', {
+      method: 'POST',
+      body: { email, code, newPassword },
+    });
+  }
+
   // Requests
   async getRequests() {
     return this.request('/requests');
